@@ -1,17 +1,16 @@
 using System.Security.Claims;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
-namespace EventPlanner.Areas.Identity;
+namespace EventPlannerBackend.Areas.Identity;
 
 public class RevalidatingIdentityAuthenticationStateProvider<TUser>
     : RevalidatingServerAuthenticationStateProvider where TUser : class
 {
-    private readonly IServiceScopeFactory _scopeFactory;
     private readonly IdentityOptions _options;
+    private readonly IServiceScopeFactory _scopeFactory;
 
     public RevalidatingIdentityAuthenticationStateProvider(
         ILoggerFactory loggerFactory,
@@ -55,15 +54,14 @@ public class RevalidatingIdentityAuthenticationStateProvider<TUser>
         {
             return false;
         }
-        else if (!userManager.SupportsUserSecurityStamp)
+
+        if (!userManager.SupportsUserSecurityStamp)
         {
             return true;
         }
-        else
-        {
-            var principalStamp = principal.FindFirstValue(_options.ClaimsIdentity.SecurityStampClaimType);
-            var userStamp = await userManager.GetSecurityStampAsync(user);
-            return principalStamp == userStamp;
-        }
+
+        var principalStamp = principal.FindFirstValue(_options.ClaimsIdentity.SecurityStampClaimType);
+        var userStamp = await userManager.GetSecurityStampAsync(user);
+        return principalStamp == userStamp;
     }
 }

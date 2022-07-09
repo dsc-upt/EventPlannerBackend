@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace EventPlanner.Utilities;
+namespace EventPlannerBackend.Utilities;
 
 public static class ObjectExtensions
 {

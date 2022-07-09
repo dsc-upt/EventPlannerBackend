@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace EventPlanner.Utilities;
+namespace EventPlannerBackend.Utilities;
 
 public static class NavigationManagerExtensions
 {

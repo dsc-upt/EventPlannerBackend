@@ -1,7 +1,8 @@
-using EventPlanner.Data;
+using EventPlannerBackend.Base.Repositories;
+using EventPlannerBackend.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventPlanner.Utilities;
+namespace EventPlannerBackend.Utilities;
 
 public static class ServicesExtensions
 {
@@ -15,6 +16,7 @@ public static class ServicesExtensions
         var connectionString = configuration.GetConnectionString(ConnectionStringId) ?? throw ConnectionStringError;
         services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(connectionString));
         services.AddDatabaseDeveloperPageExceptionFilter();
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         return services;
     }
 }

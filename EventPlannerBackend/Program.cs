@@ -1,6 +1,7 @@
-using EventPlanner.Areas.Identity;
-using EventPlanner.Data;
-using EventPlanner.Utilities;
+using System.Reflection;
+using EventPlannerBackend.Areas.Identity;
+using EventPlannerBackend.Data;
+using EventPlannerBackend.Utilities;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 
@@ -15,6 +16,11 @@ services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfi
 services.AddRazorPages();
 services.AddServerSideBlazor();
 services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 var app = builder.Build();
 
@@ -39,8 +45,16 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSwagger();
+app.UseSwaggerUI(config =>
+{
+    config.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    config.RoutePrefix = "api/swagger";
+});
+
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
+
 
 app.Run();

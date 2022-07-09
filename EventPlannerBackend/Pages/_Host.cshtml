@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Microsoft.AspNetCore.Components.Web
-@namespace EventPlanner.Pages
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@namespace EventPlannerBackend.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
 <!DOCTYPE html>
@@ -11,7 +12,7 @@
     <base href="~/"/>
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css"/>
     <link href="css/site.css" rel="stylesheet"/>
-    <link href="EventPlanner.styles.css" rel="stylesheet"/>
+    <link href="EventPlannerBackend.styles.css" rel="stylesheet"/>
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered"/>
 </head>
 <body>

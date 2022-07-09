@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using EventPlannerBackend.Features.Events;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace EventPlanner.Data;
+namespace EventPlannerBackend.Data;
 
 public class ApplicationDbContext : IdentityDbContext
 {
@@ -9,4 +10,6 @@ public class ApplicationDbContext : IdentityDbContext
         : base(options)
     {
     }
+
+    public DbSet<Event> Events { get; set; } = null!;
 }
