@@ -1,0 +1,86 @@
+﻿@page "/admin/{model}"
+@using EventPlannerBackend.Data
+@using EventPlannerBackend.Features.Events
+@using EventPlannerBackend.Base.Repositories
+@using EventPlannerBackend.Base.Models
+@inject ApplicationDbContext DbContext
+
+<PageTitle>Entities page</PageTitle>
+
+<h1>@Type?.Name page</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (Repo is null)
+{
+    <p>
+        <em>Loading...</em>
+    </p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            @{
+                var properties = Type.GetProperties();
+                foreach (var property in properties)
+                {
+                    <th>
+                        @property.Name
+                    </th>
+                }
+            }
+        </tr>
+        </thead>
+        @if (Items.Any())
+        {
+            <tbody>
+            @foreach (var entity in Items)
+            {
+                <tr>
+                    @{
+                        var props = Type.GetProperties();
+                        foreach (var property in props)
+                        {
+                            <td>
+                                @property.GetValue(entity)
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+            </tbody>
+        }
+    </table>
+}
+
+@code {
+    private IRepository<Event>? Repo;
+    private Type? Type;
+
+    [Parameter]
+    public string Model { get; set; } = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine(Model);
+        var baseType = typeof(Entity);
+        Type = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(p => baseType.IsAssignableFrom(p) && !p.IsAbstract).FirstOrDefault(p => string.Equals(p.Name, Model, StringComparison.CurrentCultureIgnoreCase));
+        if (Type is not null)
+        {
+            Repo = (IRepository<Event>)Activator.CreateInstance(typeof(Repository<>).MakeGenericType(Type), DbContext);
+            if (Repo is null)
+            {
+                Console.WriteLine("Repo is null");
+            }
+        }
+
+        Items = (await Repo.GetList()).ToList();
+    }
+
+    public List<Event> Items { get; set; } = new();
+
+}

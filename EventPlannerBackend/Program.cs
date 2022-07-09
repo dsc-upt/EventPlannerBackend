@@ -1,4 +1,3 @@
-using System.Reflection;
 using EventPlannerBackend.Areas.Identity;
 using EventPlannerBackend.Data;
 using EventPlannerBackend.Utilities;
@@ -16,11 +15,7 @@ services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfi
 services.AddRazorPages();
 services.AddServerSideBlazor();
 services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-services.AddSwaggerGen(options =>
-{
-    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-});
+services.AddSwagger();
 
 var app = builder.Build();
 
